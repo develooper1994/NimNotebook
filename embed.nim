@@ -18,3 +18,6 @@ proc executeScript*(script: string) =
 when isMainModule:
   let script = paramStr(1)
   executeScript(script)
+
+
+# compile this w/ 'nim c -d:release embed.nim

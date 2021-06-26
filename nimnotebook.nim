@@ -22,3 +22,5 @@ exposeProcs:
 
 
 startApp(appMode=false)
+
+# compile w/ 'nim c -r --threads:on nimnotebook.nim
