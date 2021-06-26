@@ -3,4 +3,4 @@ A pure Nim implementation of Jupyter Notebook, powered by Nimscript. Nim Noteboo
 
 ## *** Currently In Development ***
 
-<add dets>
+![Test Image 1](https://github.com/Niminem/NimNotebook/blob/main/imgs/0.1.0-alpha2.png)
