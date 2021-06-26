@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nim Notebook v0.1.0-alpha</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="codemirror/dracula.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Open+Sans|Titillium+Web">
+    <script src="codemirror/lib/codemirror.js"></script>
+    <script src="codemirror/mode/nim/nim.js"></script>
+    <script src="neel.js"></script>
+</head>
+<body>
+
+    <div class="navigation">
+        <h1>Nim Notebook</h1>
+        <button class="material-icons">add</button>
+        <button class="material-icons" onClick="callKernal(editor)">play_arrow</button>
+        <button class="material-icons" onClick="callKernalAll(editor,editor2,'output','output2')">fast_forward</button>
+        <button class="material-icons">stop</button>
+        <button class="material-icons" onClick="resetAllOutput()">restart_alt</button>
+    </div>
+
+    <div class="container">
+        <div class="cell-container">
+
+            <div class="cell-row">
+                <p class="in-out">In [ ]:</p>
+                <textarea id="script"></textarea>
+                <script>
+                    var editor = CodeMirror.fromTextArea(script, {
+                      lineNumbers: true,
+                      mode: "nim",
+                    });
+                    editor.setSize("90%","10%")
+                  </script>
+            </div>
+
+            <div class="cell-row">
+                <pre class="code-output" id="output"></pre>
+            </div>
+        </div>
+
+
+
+        <div class="cell-container">
+
+            <div class="cell-row">
+                <p class="in-out">In [ ]:</p>
+                <textarea id="script2"></textarea>
+                <script>
+                    var editor2 = CodeMirror.fromTextArea(script2, {
+                        lineNumbers: true,
+                        mode: "nim",
+                    });
+                    editor2.setSize("90%","10%")
+                    </script>
+            </div>
+
+            <div class="cell-row">
+                <pre class="code-output" id="output2"></pre>
+            </div>
+
+        </div>
+
+
+    </div>
+    <div style="margin-bottom: 5%;"></div>
+    <script>
+        function callKernal(ed,id){
+            let script = ed.getValue()
+            neel.callProc("kernal",id,script);
+        }
+        function callKernalAll(ed, ed2, id1, id2){
+            let script = ed.getValue()
+            neel.callProc("kernal",id1,script);
+            let script2 = ed2.getValue()
+            neel.callProc("kernal",id2,script2);
+        }
+        function kernalOutput(outputId, output){
+            document.getElementById(outputId).innerHTML = output;
+        }
+        function resetOutput(outputId){
+            //editor.setValue("")
+            document.getElementById(outputId).innerHTML = "";
+        }
+        function resetAllOutput(){
+            console.log("(to do) resetting all cell outputs...")
+            document.getElementById("output").innerHTML = "";
+            document.getElementById("output2").innerHTML = "";
+        }
+    </script>
+
+</body>
+</body>
+</html>
