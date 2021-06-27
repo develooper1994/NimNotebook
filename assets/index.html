@@ -19,14 +19,14 @@
     <div class="navigation">
         <h1>Nim Notebook</h1>
         <button class="material-icons">add</button>
-        <button class="material-icons" onClick="callKernal(editor,'output')">play_arrow</button>
+        <button class="material-icons" id="play" onClick="callKernal(editor,'output')">play_arrow</button>
         <button class="material-icons" onClick="callKernalAll(editor,editor2,'output','output2')">fast_forward</button>
         <button class="material-icons">stop</button>
         <button class="material-icons" onClick="resetAllOutput()">restart_alt</button>
     </div>
 
     <div class="container">
-        <div class="cell-container">
+        <div class="cell-container code-cell">
 
             <div class="cell-row">
                 <p class="in-out">In [ ]:</p>
@@ -47,7 +47,7 @@
 
 
 
-        <div class="cell-container">
+        <div class="cell-container code-cell">
 
             <div class="cell-row">
                 <p class="in-out">In [ ]:</p>
@@ -70,6 +70,16 @@
 
     </div>
     <div style="margin-bottom: 5%;"></div>
+
+    <script>
+        function $(query) {
+            if (query[0] === "#") {
+                return document.querySelector(query)
+            }
+            return document.querySelectorAll(query)
+        }
+    </script>
+
     <script>
         function callKernal(ed,id){
             let script = ed.getValue()
@@ -93,6 +103,19 @@
             document.getElementById("output").innerHTML = "";
             document.getElementById("output2").innerHTML = "";
         }
+    </script>
+
+    <script>
+        Array.from(document.querySelectorAll(".code-cell")).map(a=>a.addEventListener("click", function(e) {
+            
+            Array.from($(".active-cell")).map(item=>{item.classList.remove("active-cell")})
+            
+            Array.from(e.path).forEach(item=>{
+                if (item.classList !== undefined && Array.from(item.classList).includes("code-cell")) {
+                        item.classList.add("active-cell")
+                }
+            })
+        }))
     </script>
 
 </body>
