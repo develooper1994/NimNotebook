@@ -19,7 +19,8 @@
     <div class="navigation">
         <h1>Nim Notebook</h1>
         <button class="material-icons">add</button>
-        <button class="material-icons" id="play" onClick="callKernal(editor,'output')">play_arrow</button>
+        <button class="material-icons" id="play" onClick="runCell()">play_arrow</button>
+        <!-- <button class="material-icons" id="play" onClick="callKernal(editor,'output')">play_arrow</button> -->
         <button class="material-icons" onClick="callKernalAll(editor,editor2,'output','output2')">fast_forward</button>
         <button class="material-icons">stop</button>
         <button class="material-icons" onClick="resetAllOutput()">restart_alt</button>
@@ -92,30 +93,49 @@
             neel.callProc("kernal",id2,script2);
         }
         function kernalOutput(outputId, output){
-            document.getElementById(outputId).innerHTML = output;
+            $(`#${outputId}`).innerHTML = output;
         }
         function resetOutput(outputId){
             //editor.setValue("")
-            document.getElementById(outputId).innerHTML = "";
+            $(`#${outputId}`).innerHTML = "";
         }
         function resetAllOutput(){
             console.log("(to do) resetting all cell outputs...")
-            document.getElementById("output").innerHTML = "";
-            document.getElementById("output2").innerHTML = "";
+            $("#output").innerHTML = "";
+            $("#output2").innerHTML = "";
         }
     </script>
 
     <script>
-        Array.from(document.querySelectorAll(".code-cell")).map(a=>a.addEventListener("click", function(e) {
+
+        var _active; /* What cell is currently active
+        
+        _active.firstElementChild.children[2].CodeMirror == Code Mirror Instance
+        ^.getValue() == gets the value of the cell
+
+        _active.children[1].firstElementChild.getAttribute("id") == output ID
+        
+        
+        */
+
+        Array.from($(".code-cell")).map(a=>a.addEventListener("click", function(e) {
             
             Array.from($(".active-cell")).map(item=>{item.classList.remove("active-cell")})
             
             Array.from(e.path).forEach(item=>{
                 if (item.classList !== undefined && Array.from(item.classList).includes("code-cell")) {
                         item.classList.add("active-cell")
+                        _active = item
                 }
             })
         }))
+
+        function runCell() {
+            let cell_code_mirror_instance_value = _active.firstElementChild.children[2].CodeMirror.getValue();
+            let cell_output_id = _active.children[1].firstElementChild.getAttribute("id");
+            // console.log("kernal", cell_output_id, cell_code_mirror_instance_value);
+            neel.callProc("kernal", cell_output_id, cell_code_mirror_instance_value);
+        }
     </script>
 
 </body>
