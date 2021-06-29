@@ -20,18 +20,18 @@ proc executeScript*(script: string) =
   intr.evalScript(llStreamOpen(script))
 
   #testing for adding global variables/procs/types/etc for subsequent scripts (cells)
-  for sym in intr.exportedSymbols:
-    echo "---"
-    echo sym #the symbol aka PSym
-    echo renderTree(astDef(sym)) #this is how to get the string, outputs the body
-    echo sym.name.s #gets name of sym
-    echo "-"
-    echo sym.typ.kind
-    echo "-"
-    echo sym.typ.n
-    echo "-"
-    echo sym.typ.callConv
-    echo "---\n"
+  # for sym in intr.exportedSymbols:
+    # echo "---"
+    # echo sym #the symbol aka PSym
+    # echo renderTree(astDef(sym)) #this is how to get the string, outputs the body
+    # echo sym.name.s #gets name of sym
+    # echo "-"
+    # echo sym.typ.kind
+    # echo "-"
+    # echo sym.typ.n
+    # echo "-"
+    # echo sym.typ.callConv
+    # echo "---\n"
 
   intr.destroyInterpreter()
   
