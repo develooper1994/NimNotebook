@@ -1,26 +1,25 @@
-import neel, osproc, os, threadpool, streams, strutils
+# compile w/ nim c -r --threads:on --threadanalysis:off nimnotebook.nim
 
+import neelmodified, osproc, os, threadpool, streams, strutils
+
+var p = startProcess(command="nim",args=["secret"], options = {poUsePath})
+var inp = inputStream(p)
+var outp = outputStream(p)
 
 exposeProcs:
   proc kernal(id,script: string) =
 
-    let cmd =  "./embed " & "'" & script & "'"
+      inp.write(script & "\necho(\"ENDOFSCRIPT\")\n")
+      inp.flush()
 
-    let p = startProcess(
-     cmd,
-      options={
-        poStdErrToStdOut,
-        poEvalCommand})
+      var output: string
+      if p.running:
+          while true:
+              let line = outp.readLine()
+              if line == "ENDOFSCRIPT": break
+              else:
+                  output.add(line & "\n")
 
-    let o = p.outputStream
-    var output: string
-    while p.running and (not o.atEnd):
-      output.add("\n" & o.readLine())
-
-    callJs("kernalOutput",id, output)
-    p.close()
-
+      callJs("kernalOutput",id, output)
 
 startApp(appMode=false)
-
-# compile w/ 'nim c -r --threads:on nimnotebook.nim
