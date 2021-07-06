@@ -103,6 +103,8 @@
             console.log("(to do) resetting all cell outputs...")
             $("#output").innerHTML = "";
             $("#output2").innerHTML = "";
+            neel.callProc("resetKernal")
+
         }
     </script>
 
@@ -135,6 +137,10 @@
             let cell_output_id = _active.children[1].firstElementChild.getAttribute("id");
             // console.log("kernal", cell_output_id, cell_code_mirror_instance_value);
             neel.callProc("kernal", cell_output_id, cell_code_mirror_instance_value);
+        }
+        //don't delete this blane-o, testing stuff
+        function logMe(p){
+            console.log(p)
         }
     </script>
 
