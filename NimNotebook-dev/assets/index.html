@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nim Notebook v0.1.0-alpha</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="codemirror/dracula.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Open+Sans|Titillium+Web">
+    <script src="codemirror/lib/codemirror.js"></script>
+    <script src="codemirror/mode/nim/nim.js"></script>
+    <script src="main.js"></script>
+</head>
+<body>
+
+    <div class="navigation">
+        <h1>Nim Notebook</h1>
+        <button class="material-icons">add</button>
+        <button class="material-icons" id="play" onClick="runCell()">play_arrow</button>
+        <button class="material-icons" onClick="callKernalAll(editor,editor2,'output','output2')">fast_forward</button>
+        <button class="material-icons">stop</button>
+        <button class="material-icons" onClick="resetAllOutput()">restart_alt</button>
+    </div>
+
+    <div class="container">
+        <div class="cell-container code-cell">
+
+            <div class="cell-row">
+                <p class="in-out">In [ ]:</p>
+                <textarea id="script"></textarea>
+                <script>
+                    var editor = CodeMirror.fromTextArea(script, {
+                      lineNumbers: true,
+                      mode: "nim",
+                    });
+                    editor.setSize("90%","10%")
+                  </script>
+            </div>
+
+            <div class="cell-row">
+                <pre class="code-output" id="output"></pre>
+            </div>
+        </div>
+
+
+
+        <div class="cell-container code-cell">
+
+            <div class="cell-row">
+                <p class="in-out">In [ ]:</p>
+                <textarea id="script2"></textarea>
+                <script>
+                    var editor2 = CodeMirror.fromTextArea(script2, {
+                        lineNumbers: true,
+                        mode: "nim",
+                    });
+                    editor2.setSize("90%","10%")
+                    </script>
+            </div>
+
+            <div class="cell-row">
+                <pre class="code-output" id="output2"></pre>
+            </div>
+
+        </div>
+
+
+    </div>
+    <div style="margin-bottom: 5%;"></div>
+
+    <script>
+        function $(query) {
+            if (query[0] === "#") {
+                return document.querySelector(query)
+            }
+            return document.querySelectorAll(query)
+        }
+    </script>
+
+    <script>
+        function callKernalAll(ed, ed2, id1, id2){
+            let script = ed.getValue()
+            kernalCall("runKernal", id1,script);
+            let script2 = ed2.getValue()
+            kernalCall("runKernal",id2,script2);
+        }
+        function kernalOutput(outputId, output){
+            $(`#${outputId}`).innerHTML = output;
+        }
+        function resetOutput(outputId){
+            //editor.setValue("")
+            $(`#${outputId}`).innerHTML = "";
+        }
+        function resetAllOutput(){
+            //window.alert("(to do) resetting all cell outputs dynamically...");
+            $("#output").innerHTML = "";
+            $("#output2").innerHTML = "";
+            kernalReset();
+
+        }
+    </script>
+
+    <script>
+
+        var _active; /* What cell is currently active */
+
+        Array.from($(".code-cell")).map(a=>a.addEventListener("click", function(e) {
+            
+            Array.from($(".active-cell")).map(item=>{item.classList.remove("active-cell")})
+            
+            Array.from(e.path).forEach(item=>{
+                if (item.classList !== undefined && Array.from(item.classList).includes("code-cell")) {
+                        item.classList.add("active-cell")
+                        _active = item
+                }
+            })
+        }))
+
+        function runCell() {
+            let cell_code_mirror_instance_value = _active.firstElementChild.children[2].CodeMirror.getValue();
+            let cell_output_id = _active.children[1].firstElementChild.getAttribute("id");
+            kernalCall("runKernal", cell_output_id, cell_code_mirror_instance_value);
+        }
+
+    </script>
+
+</body>
+</body>
+</html>
