@@ -5,7 +5,7 @@ A Jupyter Notebook-like IDE for Nim. Nim Notebook allows you to create documents
 
 Some Notes:
 
-- Nim Notebook works with `nim secret` as the REPL, however we plan on adding `inim` as another option in the near future.
+- Currently, Nim Notebook works with `nim secret` as the REPL, however we plan on implementing an entirely different system in the near future. `nim secret` does not allow access to FFI among other things.
 - The code cells share the same state- so declaring procedures, types, and variables in a cell will be available to the following cells.
 
 ## *** Currently In Development ***
