@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +13,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Open+Sans|Titillium+Web">
     <script src="codemirror/lib/codemirror.js"></script>
     <script src="codemirror/mode/nim/nim.js"></script>
-    <script src="neel.js"></script>
+    <script src="main.js"></script>
 </head>
 <body>
 
@@ -20,7 +21,6 @@
         <h1>Nim Notebook</h1>
         <button class="material-icons">add</button>
         <button class="material-icons" id="play" onClick="runCell()">play_arrow</button>
-        <!-- <button class="material-icons" id="play" onClick="callKernal(editor,'output')">play_arrow</button> -->
         <button class="material-icons" onClick="callKernalAll(editor,editor2,'output','output2')">fast_forward</button>
         <button class="material-icons">stop</button>
         <button class="material-icons" onClick="resetAllOutput()">restart_alt</button>
@@ -82,15 +82,11 @@
     </script>
 
     <script>
-        function callKernal(ed,id){
-            let script = ed.getValue()
-            neel.callProc("kernal",id,script);
-        }
         function callKernalAll(ed, ed2, id1, id2){
             let script = ed.getValue()
-            neel.callProc("kernal",id1,script);
+            kernalCall("runKernal", id1,script);
             let script2 = ed2.getValue()
-            neel.callProc("kernal",id2,script2);
+            kernalCall("runKernal",id2,script2);
         }
         function kernalOutput(outputId, output){
             $(`#${outputId}`).innerHTML = output;
@@ -100,25 +96,17 @@
             $(`#${outputId}`).innerHTML = "";
         }
         function resetAllOutput(){
-            console.log("(to do) resetting all cell outputs...")
+            //window.alert("(to do) resetting all cell outputs dynamically...");
             $("#output").innerHTML = "";
             $("#output2").innerHTML = "";
-            neel.callProc("resetKernal")
+            kernalReset();
 
         }
     </script>
 
     <script>
 
-        var _active; /* What cell is currently active
-        
-        _active.firstElementChild.children[2].CodeMirror == Code Mirror Instance
-        ^.getValue() == gets the value of the cell
-
-        _active.children[1].firstElementChild.getAttribute("id") == output ID
-        
-        
-        */
+        var _active; /* What cell is currently active */
 
         Array.from($(".code-cell")).map(a=>a.addEventListener("click", function(e) {
             
@@ -135,13 +123,9 @@
         function runCell() {
             let cell_code_mirror_instance_value = _active.firstElementChild.children[2].CodeMirror.getValue();
             let cell_output_id = _active.children[1].firstElementChild.getAttribute("id");
-            // console.log("kernal", cell_output_id, cell_code_mirror_instance_value);
-            neel.callProc("kernal", cell_output_id, cell_code_mirror_instance_value);
+            kernalCall("runKernal", cell_output_id, cell_code_mirror_instance_value);
         }
-        //don't delete this blane-o, testing stuff
-        function logMe(p){
-            console.log(p)
-        }
+
     </script>
 
 </body>

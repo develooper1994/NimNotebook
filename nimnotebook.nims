@@ -1,4 +1,4 @@
-proc switch() {.varargs,importc.} # ignores annoying error msg for `switch`
+proc switch() {.varargs,importc.} # ignores annoying error msg for `switch` procedures
 switch("threads","on")
 switch("threadAnalysis","off")
 switch("gc","orc")
